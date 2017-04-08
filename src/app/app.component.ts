@@ -21,8 +21,6 @@ export class AppComponent {
 		var endDate = new Date(2017,3,30);
 
 		var now = new Date();
-		var today19h = new Date();
-		this.setTimeTo19(today19h);
 		var tomorrow = new Date();
 		tomorrow.setTime(now.getTime() + millsInOneDay);
 		this.resetDateTo0(tomorrow);
@@ -46,24 +44,33 @@ export class AppComponent {
 		this.days = remainingDays;
 
     if (!isSatOrSun){
-  		if (now.getHours() < this.startHour){
-  			this.hours = 8;
-  		} else if (now.getHours() < this.endHour){
-  			var diffHours = today19h.getHours() - now.getHours();
-  			if (now.getMinutes() > 0){
-  				diffHours -= 1;
-  				// compute remaining minutes
-  				this.minutes = 60 - now.getMinutes();
-  				if (now.getSeconds() > 0){
-  					this.minutes -= 1;
-  					this.seconds = 60 - now.getSeconds();
-  				}
-  			}
-
-  			this.hours = diffHours;
-  		}
+      setInterval(() => {
+                this.computeAndShowTime();
+              }, 1000);
     }
 	}
+
+  computeAndShowTime(){
+    var now = new Date();
+		var today19h = new Date();
+		this.setTimeTo19(today19h);
+    if (now.getHours() < this.startHour){
+      this.hours = 8;
+    } else if (now.getHours() < this.endHour){
+      var diffHours = today19h.getHours() - now.getHours();
+      if (now.getMinutes() > 0){
+        diffHours -= 1;
+        // compute remaining minutes
+        this.minutes = 60 - now.getMinutes();
+        if (now.getSeconds() > 0){
+          this.minutes -= 1;
+          this.seconds = 60 - now.getSeconds();
+        }
+      }
+
+      this.hours = diffHours;
+    }
+  }
 
 	resetDateTo0(date : Date){
 		date.setHours(0);
