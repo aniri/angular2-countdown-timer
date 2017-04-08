@@ -12,6 +12,9 @@ export class AppComponent {
 	minutes = 0;
 	seconds = 0;
 
+  startHour = 11;
+  endHour = 20;
+
 	constructor(){
 		var millsInOneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
 
@@ -30,27 +33,36 @@ export class AppComponent {
 
 		var remainingDays = diffDays - this.weeks * 7;
 
+    var isSatOrSun = false;
+
+    if (remainingDays == 0 || remainingDays == 1){
+      isSatOrSun = true;
+      remainingDays = 0;
+    }
+
 		if (remainingDays >= 2)
-			remainingDays -= 2;
+			remainingDays -= 2; // substract weekend days
 
 		this.days = remainingDays;
 
-		if (now.getHours() < 10){
-			this.hours = 8;
-		} else if (now.getHours() < 19){
-			var diffHours = today19h.getHours() - now.getHours();
-			if (now.getMinutes() > 0){
-				diffHours -= 1;
-				// compute remaining minutes
-				this.minutes = 60 - now.getMinutes();
-				if (now.getSeconds() > 0){
-					this.minutes -= 1;
-					this.seconds = 60 - now.getSeconds();
-				}
-			}
+    if (!isSatOrSun){
+  		if (now.getHours() < this.startHour){
+  			this.hours = 8;
+  		} else if (now.getHours() < this.endHour){
+  			var diffHours = today19h.getHours() - now.getHours();
+  			if (now.getMinutes() > 0){
+  				diffHours -= 1;
+  				// compute remaining minutes
+  				this.minutes = 60 - now.getMinutes();
+  				if (now.getSeconds() > 0){
+  					this.minutes -= 1;
+  					this.seconds = 60 - now.getSeconds();
+  				}
+  			}
 
-			this.hours = diffHours;
-		}
+  			this.hours = diffHours;
+  		}
+    }
 	}
 
 	resetDateTo0(date : Date){
@@ -63,7 +75,7 @@ export class AppComponent {
 	}
 
 	setTimeTo19(date : Date){
-		date.setHours(19);
+		date.setHours(this.endHour);
 		date.setMinutes(0);
 		date.setSeconds(0);
 		date.setMilliseconds(0);
