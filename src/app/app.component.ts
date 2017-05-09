@@ -21,32 +21,35 @@ export class AppComponent {
 		var endDate = new Date(2017,3,30);
 
 		var now = new Date();
-		var tomorrow = new Date();
-		tomorrow.setTime(now.getTime() + millsInOneDay);
-		this.resetDateTo0(tomorrow);
 
-		var diffDays = Math.round((endDate.getTime() - tomorrow.getTime())/(millsInOneDay))+1;
+    if (endDate > now){
+  		var tomorrow = new Date();
+  		tomorrow.setTime(now.getTime() + millsInOneDay);
+  		this.resetDateTo0(tomorrow);
 
-		this.weeks = Math.floor(diffDays / 7);
+  		var diffDays = Math.round((endDate.getTime() - tomorrow.getTime())/(millsInOneDay))+1;
 
-		var remainingDays = diffDays - this.weeks * 7;
+  		this.weeks = Math.floor(diffDays / 7);
 
-    var isSatOrSun = false;
+  		var remainingDays = diffDays - this.weeks * 7;
 
-    if (remainingDays == 0 || remainingDays == 1){
-      isSatOrSun = true;
-      remainingDays = 0;
-    }
+      var isSatOrSun = false;
 
-		if (remainingDays >= 2)
-			remainingDays -= 2; // substract weekend days
+      if (remainingDays == 0 || remainingDays == 1){
+        isSatOrSun = true;
+        remainingDays = 0;
+      }
 
-		this.days = remainingDays;
+  		if (remainingDays >= 2)
+  			remainingDays -= 2; // substract weekend days
 
-    if (!isSatOrSun){
-      setInterval(() => {
-                this.computeAndShowTime();
-              }, 1000);
+  		this.days = remainingDays;
+
+      if (!isSatOrSun){
+        setInterval(() => {
+                  this.computeAndShowTime();
+                }, 1000);
+      }
     }
 	}
 
